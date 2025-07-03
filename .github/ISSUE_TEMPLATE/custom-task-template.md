@@ -7,11 +7,14 @@ assignees: AyrtonCR
 
 ---
 
-Brief description of task: 
+<u><h3><b>Brief description of task: </b></h3></u>
+
+- 
+
 
 ---
 
-<u><h3><b>Acceptance Criteria</b></h3></u>
+<u><h3><b>Acceptance Criteria: </b></h3></u>
 
 - 
 - 
