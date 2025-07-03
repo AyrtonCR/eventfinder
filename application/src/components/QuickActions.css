@@ -1,0 +1,47 @@
+/* pill variables pulled from your dark theme */
+:root {
+  --pill-bg: rgba(255, 255, 255, 0.05);
+  --pill-border: rgba(255, 255, 255, 0.12);
+  --pill-text: #e8e8e8;
+  --pill-hover: #e94560;
+}
+
+.qa {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  max-width: 600px;
+  margin: 1.5rem auto 2.5rem;
+  padding: 0 1rem;
+}
+
+.qa__btn {
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-text);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.55rem 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.15s;
+}
+
+.qa__btn:hover,
+.qa__btn:focus {
+  outline: none;
+  background: var(--pill-hover);
+  color: #fff;
+}
+
+.qa__btn:active {
+  transform: translateY(2px);
+}
+
+.qa__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0;
+}

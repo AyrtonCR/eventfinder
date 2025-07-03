@@ -1,0 +1,154 @@
+/* ---------------- root backdrop ---------------- */
+.calendar-section {
+  position: relative;
+  padding: 4rem 1rem 6rem;
+  display: flex;
+  justify-content: center;
+  background: radial-gradient(
+      ellipse at top left,
+      rgba(88, 17, 219, 0.25),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(218, 13, 119, 0.2),
+      transparent 60%
+    ),
+    #0a0a0c; /* underlying near‑black */
+  overflow: hidden;
+}
+
+/* subtle floating aurora blobs */
+.calendar-section::before,
+.calendar-section::after {
+  content: '';
+  position: absolute;
+  border-radius: 45%;
+  filter: blur(90px);
+  mix-blend-mode: screen;
+  animation: float 18s ease-in-out infinite alternate;
+}
+
+.calendar-section::before {
+  width: 420px;
+  height: 420px;
+  background: #3f51b5;
+  top: -120px;
+  left: -120px;
+}
+.calendar-section::after {
+  width: 520px;
+  height: 520px;
+  background: #d81b60;
+  bottom: -150px;
+  right: -120px;
+  animation-delay: 5s;
+}
+
+@keyframes float {
+  from { transform: translateY(-20px) rotate(0deg); }
+  to   { transform: translateY(20px)  rotate(8deg); }
+}
+
+/* -------------- calendar + list wrapper -------------- */
+.calendar-wrapper {
+  width: min(100%, 1000px);
+  backdrop-filter: blur(6px) saturate(160%);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  /* mobile: stacked; desktop ≥900px: two‑column */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .calendar-wrapper { grid-template-columns: 1fr 1fr; }
+}
+
+/* -------------- react‑calendar overrides -------------- */
+.main-cal {
+  --cal-bg: transparent;
+  --cal-text: #e0e0e0;
+  --cal-accent: #e94560;
+  --cal-muted: #888;
+
+  background: var(--cal-bg);
+  color: var(--cal-text);
+  border: none;
+  width: 100%;
+  font-family: inherit;
+}
+/* navigation header (month selector) */
+.main-cal .react-calendar__navigation button {
+  color: var(--cal-text);
+  min-width: 44px;
+  background: none;
+  font-weight: 600;
+}
+.main-cal .react-calendar__navigation button:enabled:hover,
+.main-cal .react-calendar__navigation button:enabled:focus {
+  background: var(--cal-accent);
+  color: #fff;
+}
+/* weekday labels */
+.main-cal .react-calendar__month-view__weekdays {
+  abbr { text-decoration: none; }
+  color: var(--cal-muted);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+/* day tiles */
+.main-cal .react-calendar__tile {
+  background: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0 0.55rem;
+}
+.main-cal .react-calendar__tile--now {
+  background: rgba(233, 69, 96, 0.15);
+}
+.main-cal .react-calendar__tile--active {
+  background: var(--cal-accent);
+  color: #fff;
+}
+.main-cal .react-calendar__tile:enabled:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* -------------- gig card list -------------- */
+.gig-list h2 {
+  font-size: 1.4rem;
+  color: #fafafa;
+  margin-bottom: 1rem;
+  letter-spacing: 0.4px;
+}
+
+.gig-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  transition: transform 0.25s;
+}
+.gig-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+.gig-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  color: #fff;
+}
+.gig-card p {
+  margin: 0;
+  color: #cfcfcf;
+  font-size: 0.95rem;
+}
+.no-gigs {
+  color: #9c9c9c;
+  font-style: italic;
+}

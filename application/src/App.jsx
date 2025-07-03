@@ -3,29 +3,30 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+// src/App.jsx
+import Header from './components/Header';
+import EventCalendar from "./components/EventCalendar";
+import DailyEvents from './components/DailyEvents';
+import QuickActions from './components/QuickActions';
+import QuickActionsBar from './components/QuickActionsBar';
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Suzy and Ayrtons Pgfdhdfgroject</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Clicsdsdsk on the Vite and React logos to learn more</p>
+      <Header />
+
+      <QuickActionsBar
+        onGenre={() => console.log('Genre')}
+        onAddGig={() => console.log('Add gig')}
+        onCalendar={() => console.log('Calendar')}
+        onToday={() => console.log('Today')}
+        onTomorrow={() => console.log('Tomorrow')}
+        onNextDay={() => console.log('Next day')}
+      />
+            <DailyEvents />
+      <EventCalendar />   
+
+      {/* rest of your routes / pages */}
     </>
   );
 }
-
 export default App;
