@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap');
 
 :root {
-  --header-height: 80px; /* keep in sync with Header padding */
+  --header-height: 100px; /* increased from 80px to accommodate larger title */
 }
 
 *, *::before, *::after { box-sizing: border-box; }

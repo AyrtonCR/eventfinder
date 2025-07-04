@@ -13,7 +13,6 @@ function App() {
   return (
     <>
       <Header />
-
       <QuickActionsBar
         onGenre={() => console.log('Genre')}
         onAddGig={() => console.log('Add gig')}

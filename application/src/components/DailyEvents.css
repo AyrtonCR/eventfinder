@@ -6,7 +6,15 @@
 .daily {
   max-width: 600px;
   margin: 3rem auto;
-  padding: 1rem clamp(1rem, 5vw, 2rem);
+  padding: 2rem clamp(1.5rem, 5vw, 2.5rem);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .daily__heading {
@@ -22,8 +30,8 @@
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: 1rem;
-  background: var(--panel-bg);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.17);
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;

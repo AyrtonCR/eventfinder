@@ -1,8 +1,8 @@
 /* ---------- Sticky bar JUST below the header ---------- */
 .quick-actions {
   position: sticky;
-  top: var(--header-height);  /* always hugs header’s bottom edge */
-  z-index: 950;               /* just under the header */
+  top: var(--header-height);  /* always hugs header's bottom edge */
+  z-index: 999;               /* increased to sit above all content */
   padding: 0.75rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -10,12 +10,14 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.8rem;
+  margin-top: 0.5rem;         /* increased margin for better separation */
+  background: transparent;    /* make it transparent to show page background */
 }
 
 /* ---------- Individual pills ---------- */
 .pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(8, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   color: #f0f0f0;
   font-weight: 600;
   font-size: 0.95rem;
@@ -23,6 +25,8 @@
   border-radius: 999px;
   cursor: pointer;
   transition: background .25s, color .2s, transform .15s;
+  width: 100px;                /* fixed width for all buttons */
+  text-align: center;          /* center text within the fixed width */
 }
 .pill:hover,
 .pill:focus {
