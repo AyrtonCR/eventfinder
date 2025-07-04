@@ -1,73 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './WeeklyEvents.css';
 
-/* ---------- dummy data ---------- */
-const gigs = [
-  /* date (YYYY-MM-DD), 24‑h time */
-  { id: 1, date: '2025-06-30', time: '20:00' },
-  { id: 2, date: '2025-07-01', time: '11:00' },
-  { id: 3, date: '2025-07-03', time: '13:00' },
-  { id: 4, date: '2025-07-03', time: '15:00' },
-  { id: 5, date: '2025-07-03', time: '15:30' },
-  { id: 6, date: '2025-07-04', time: '16:00' },
-  { id: 7, date: '2025-07-05', time: '19:00' },
-  { id: 8, date: '2025-07-02', time: '18:00' },
+const days = ['Mon 29', 'Tues 30', 'Wed 1st', 'Thur 2th', 'Fri 3rd', 'Sat 4th', 'Sun 5th'];
+const times = ['10am', '11am', '12am', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm', '12am', '1am', '2am'];
+
+// Example event data: { day: 1, time: 1, label: '2', color: '#c9a58e' }
+const events = [
+  { day: 1, time: 2, label: '2', color: '#c9a58e' },
+  { day: 3, time: 4, label: '1', color: '#e9cba7' },
+  { day: 2, time: 7, label: '2', color: '#f7e7b6' },
+  { day: 5, time: 6, label: '3', color: '#e9a7a7' },
+  { day: 1, time: 8, label: '1', color: '#e9cba7' },
+  { day: 1, time: 9, label: '1', color: '#e9cba7' },
+  { day: 7, time: 10, label: '7', color: '#a7b7e9' },
 ];
 
-/* ---------- helpers ---------- */
-const hours = Array.from({ length: 11 }, (_, i) => i + 10); // 10 → 20 (10 am–8 pm)
-const addDays = (d, n) => {
-  const x = new Date(d);
-  x.setDate(x.getDate() + n);
-  return x;
-};
-const fmt = (d) => d.toISOString().slice(0, 10); // yyyy-mm-dd
-const monthLabel = (start) =>
-  `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()} – ${
-    addDays(start, 6).toLocaleString('default', { month: 'long', day: 'numeric' })
-  }`;
-
-export default function WeeklyEvents({ weekStart = new Date('2025-06-29') /* Sunday */ }) {
-  const [start, setStart] = useState(weekStart); // can be changed with arrows
-
-  const days = [...Array(7)].map((_, i) => addDays(start, i));
-  const counts = {};
-  gigs.forEach((g) => {
-    const key = `${g.date}-${g.time.slice(0, 2)}`;
-    counts[key] = (counts[key] || 0) + 1;
-  });
-
+export default function WeeklyEvents() {
   return (
-    <section className="week">
-      <header className="week__header">
-        <button onClick={() => setStart(addDays(start, -7))}>&larr; Last&nbsp;week</button>
-        <h2>{monthLabel(start)}</h2>
-        <button onClick={() => setStart(addDays(start, 7))}>Next&nbsp;week &rarr;</button>
-      </header>
-
-      <div className="week__grid">
-        {/* column headers */}
-        <div className="week__grid--sticky" />
-        {days.map((d) => (
-          <div key={d} className="week__dow">
-            {d.toLocaleDateString('en-NZ', { weekday: 'short' })}{' '}
-            <span className="week__date">{d.getDate()}</span>
-          </div>
+    <section className="weekly-view">
+      <div className="weekly-header-row">
+        <button className="weekly-arrow">&#8592; Last week</button>
+        <span className="weekly-title">June 29th - July 5th</span>
+        <button className="weekly-arrow">Next week &#8594;</button>
+      </div>
+      <div className="weekly-grid">
+        <div className="weekly-grid-header" />
+        {days.map((day, i) => (
+          <div className="weekly-grid-header" key={day}>{day}</div>
         ))}
-
-        {/* rows */}
-        {hours.map((h) => (
-          <React.Fragment key={h}>
-            <div className="week__hour">{h <= 12 ? `${h}am` : `${h - 12}pm`}</div>
-            {days.map((d) => {
-              const key = `${fmt(d)}-${String(h).padStart(2, '0')}`;
-              const c = counts[key] || 0;
+        {times.map((time, rowIdx) => (
+          <React.Fragment key={time}>
+            <div className="weekly-grid-time">{time}</div>
+            {days.map((_, colIdx) => {
+              const event = events.find(e => e.day === colIdx + 1 && e.time === rowIdx + 1);
               return (
-                <div
-                  key={key}
-                  className={`week__cell${c ? ' has' : ''}`}
-                  data-count={c || ''}
-                />
+                <div className="weekly-grid-cell" key={colIdx + '-' + rowIdx}>
+                  {event && (
+                    <div className="weekly-event" style={{ background: event.color }}>{event.label}</div>
+                  )}
+                </div>
               );
             })}
           </React.Fragment>

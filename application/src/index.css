@@ -14,3 +14,22 @@ html, body, #root {
   background: #0a0a0c;
   color: #e0e0e0;
 }
+
+.daily-section, .weekly-section, .calendar-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  .daily-section, .weekly-section, .calendar-section {
+    min-height: unset;
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+}

@@ -8,7 +8,7 @@ export default function QuickActionsBar({
   onCalendar = () => {},
   onToday = () => {},
   onTomorrow = () => {},
-  onNextDay = () => {},
+  onWeekly = () => {},
 }) {
   return (
     <div className="quick-actions">
@@ -17,9 +17,7 @@ export default function QuickActionsBar({
       <button className="pill" onClick={onCalendar}>Calendar</button>
       <button className="pill" onClick={onToday}>Today</button>
       <button className="pill" onClick={onTomorrow}>Tomorrow</button>
-      <button className="pill pill--arrow" onClick={onNextDay}>
-        <FiArrowRight size={18} />
-      </button>
+      <button className="pill" onClick={onWeekly}>Weekly</button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import './DailyEvents.css';
 
 /* -------- dummy data (sorted below) -------- */
@@ -22,24 +23,39 @@ const mins = (t) => {
   return h * 60 + m;
 };
 
-export default function DailyEvents({ dateLabel = 'Friday • 3 July 2025' }) {
+export default function DailyEvents({ dateLabel = 'Friday • 3 July 2025', onNextDay }) {
   const sorted = [...gigs].sort((a, b) => mins(a.time) - mins(b.time));
 
   return (
     <section className="daily">
-      <h2 className="daily__heading">{dateLabel}</h2>
-
+      <div className="daily__heading-row">
+        <h2 className="daily__heading">{dateLabel}</h2>
+        <button className="daily__arrow" onClick={onNextDay} title="Next day">
+          <span style={{fontSize: '2.4rem', fontWeight: 900, fontFamily: 'Montserrat, sans-serif', lineHeight: 1}}>&#8594;</span>
+        </button>
+      </div>
       {sorted.map((g) => (
-        <article key={g.id} className="daily__gig">
-          <div className="daily__time">{g.time}</div>
-          <div className="daily__info">
-            <h3>{g.venue}</h3>
-            <p>{g.artist}</p>
-            <p className="daily__meta">
-              {g.genre} &nbsp;•&nbsp; {g.details}
-            </p>
+        <motion.article
+          key={g.id}
+          className="daily__gig"
+          whileHover={{
+            scale: 1.035,
+            transition: {
+              type: 'spring', stiffness: 200, damping: 18, duration: 0.25
+            }
+          }}
+        >
+          <div className="daily__gig-inner">
+            <div className="daily__time">{g.time}</div>
+            <div className="daily__info">
+              <h3>{g.venue}</h3>
+              <p>{g.artist}</p>
+              <p className="daily__meta">
+                {g.genre} &nbsp;•&nbsp; {g.details}
+              </p>
+            </div>
           </div>
-        </article>
+        </motion.article>
       ))}
     </section>
   );
