@@ -33,3 +33,20 @@ html, body, #root {
     margin: 0;
   }
 }
+
+.down-arrow-desktop {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .down-arrow-desktop {
+    position: absolute;
+    left: 50%;
+    bottom: 7vh;
+    transform: translateX(-50%);
+    width: 100%;
+    z-index: 1000;
+    pointer-events: auto;
+  }
+}

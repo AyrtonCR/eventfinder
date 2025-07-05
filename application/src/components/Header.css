@@ -25,7 +25,9 @@
 
 .header__left {
   display: flex;
+  align-items: center;
   justify-content: flex-start;
+  flex: 1;
 }
 
 .header__right {
@@ -75,4 +77,29 @@
   background: rgba(0, 0, 0, 0.92);
   padding: 1rem 1.5rem;
   border-radius: 0.75rem;
+}
+
+.header__profile-emoji {
+  background: rgba(255, 179, 71, 0.1);
+  border: 2px solid rgba(255, 179, 71, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.header__profile-emoji:hover {
+  background: rgba(255, 179, 71, 0.2);
+  border-color: rgba(255, 179, 71, 0.5);
+  box-shadow: 0 4px 12px rgba(255, 179, 71, 0.2);
+}
+
+.header__profile-emoji .emoji {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }

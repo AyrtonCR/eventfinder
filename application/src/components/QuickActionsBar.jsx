@@ -1,9 +1,10 @@
 import React from 'react';
 import { FiArrowRight } from 'react-icons/fi';
+import GenreDropdown from './GenreDropdown';
 import './QuickActionsBar.css';
 
 export default function QuickActionsBar({
-  onGenre = () => {},
+  onGenreChange = () => {},
   onAddGig = () => {},
   onCalendar = () => {},
   onToday = () => {},
@@ -12,8 +13,8 @@ export default function QuickActionsBar({
 }) {
   return (
     <div className="quick-actions">
-      <button className="pill" onClick={onGenre}>Genre</button>
-      <button className="pill" onClick={onAddGig}>Add Gig</button>
+      <GenreDropdown onGenreChange={onGenreChange} />
+      <button className="pill" onClick={onAddGig}>Add Gig</button>
       <button className="pill" onClick={onCalendar}>Calendar</button>
       <button className="pill" onClick={onToday}>Today</button>
       <button className="pill" onClick={onTomorrow}>Tomorrow</button>
