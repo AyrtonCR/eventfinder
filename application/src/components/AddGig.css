@@ -147,6 +147,27 @@
   border-color: #ffb347;
 }
 
+.view-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #bfc2d0;
+  padding: 0.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+}
+
+.view-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #f3f3f7;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .add-new-item {
   margin-top: 1rem;
   padding: 1rem;

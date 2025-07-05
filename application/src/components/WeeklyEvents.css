@@ -102,26 +102,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  gap: 1rem;
 }
+
 .weekly-title {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #fafafa;
+  color: #fff;
+  text-align: center;
+  flex: 1;
 }
+
 .weekly-arrow {
   background: none;
   border: none;
-  color: #f8d14d;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.2rem 0.7rem;
-  border-radius: 0.5rem;
-  transition: background 0.2s, color 0.2s;
-}
-.weekly-arrow:hover {
-  background: rgba(255,255,255,0.07);
   color: #fff;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.weekly-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.weekly-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.weekly-today-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.weekly-today-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .weekly-grid {

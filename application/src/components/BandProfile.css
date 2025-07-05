@@ -1,0 +1,296 @@
+.band-profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+
+.band-profile-modal {
+  background: rgba(24, 26, 32, 0.98);
+  border-radius: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #bfc2d0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #f3f3f7;
+  transform: scale(1.1);
+}
+
+.band-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.band-emoji {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 179, 71, 0.2) 0%, rgba(255, 140, 66, 0.2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 179, 71, 0.3);
+  flex-shrink: 0;
+}
+
+.band-emoji span {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.band-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.band-info {
+  flex: 1;
+}
+
+.band-info h2 {
+  color: #f3f3f7;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #ffb347 0%, #ff8c42 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.band-tagline {
+  color: #bfc2d0;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.band-profile-content {
+  padding: 1.5rem 2rem 2rem 2rem;
+}
+
+.band-section {
+  margin-bottom: 2rem;
+}
+
+.band-section:last-child {
+  margin-bottom: 0;
+}
+
+.band-section h3 {
+  color: #e0e0e7;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.band-section h3 svg {
+  color: #ffb347;
+}
+
+.band-description {
+  color: #bfc2d0;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.genres-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.genre-tag {
+  background: rgba(255, 179, 71, 0.1);
+  color: #ffb347;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 179, 71, 0.2);
+}
+
+.vibe-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.vibe-tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f3f3f7;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #bfc2d0;
+  font-size: 0.95rem;
+}
+
+.contact-item svg {
+  color: #ffb347;
+  font-size: 1rem;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #bfc2d0;
+  text-decoration: none;
+  padding: 0.8rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f3f3f7;
+  transform: translateX(5px);
+}
+
+.social-link svg {
+  font-size: 1.1rem;
+}
+
+.social-link.instagram:hover svg {
+  color: #e4405f;
+}
+
+.social-link.facebook:hover svg {
+  color: #1877f2;
+}
+
+.social-link.twitter:hover svg {
+  color: #1da1f2;
+}
+
+.social-link.youtube:hover svg {
+  color: #ff0000;
+}
+
+/* Scrollbar styling */
+.band-profile-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.band-profile-modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.band-profile-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 179, 71, 0.3);
+  border-radius: 3px;
+}
+
+.band-profile-modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 179, 71, 0.5);
+}
+
+@media (max-width: 700px) {
+  .band-profile-overlay {
+    padding: 0.5rem;
+  }
+  
+  .band-profile-modal {
+    max-height: 95vh;
+  }
+  
+  .band-profile-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .band-emoji {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .band-emoji span {
+    font-size: 2rem;
+  }
+  
+  .band-info h2 {
+    font-size: 1.5rem;
+  }
+  
+  .band-profile-content {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .band-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .close-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 35px;
+    height: 35px;
+  }
+} 
