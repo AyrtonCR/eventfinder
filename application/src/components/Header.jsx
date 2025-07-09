@@ -4,9 +4,14 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
+import { useAuth0 } from '@auth0/auth0-react';
+
+
 export default function Header({ userProfile = null }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
 
   const handleTitleClick = () => {
     navigate('/');
@@ -82,7 +87,7 @@ export default function Header({ userProfile = null }) {
         >
           Christchurch Live Music
         </motion.h1>
-        
+        {/* Remove the unstyled login/logout buttons from here */}
         <div className="header__right">
           <nav className={`header__nav ${open ? 'is-open' : ''}`}>
             <a href="/auth" className="header__nav-link" target="_blank" rel="noopener noreferrer">
@@ -95,7 +100,7 @@ export default function Header({ userProfile = null }) {
                 }}
                 style={{ display: 'inline-block' }}
               >
-                Log In
+                My Profile
               </motion.span>
             </a>
             <a href="/about" className="header__nav-link" target="_blank" rel="noopener noreferrer">
@@ -111,6 +116,34 @@ export default function Header({ userProfile = null }) {
                 About
               </motion.span>
             </a>
+            {/* Add Auth0 login/logout buttons styled as nav links */}
+            {!isAuthenticated ? (
+              <button
+                className="header__nav-link"
+                style={{ background: 'none', border: 'none', color: '#eee', font: 'inherit', cursor: 'pointer', padding: 0, marginLeft: '1.2rem' }}
+                onClick={() => loginWithRedirect()}
+              >
+                <motion.span
+                  whileHover={{ scale: 1.07 }}
+                  style={{ display: 'inline-block' }}
+                >
+                  Log In / Sign Up
+                </motion.span>
+              </button>
+            ) : (
+              <button
+                className="header__nav-link"
+                style={{ background: 'none', border: 'none', color: '#eee', font: 'inherit', cursor: 'pointer', padding: 0, marginLeft: '1.2rem' }}
+                onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              >
+                <motion.span
+                  whileHover={{ scale: 1.07 }}
+                  style={{ display: 'inline-block' }}
+                >
+                  Log Out
+                </motion.span>
+              </button>
+            )}
           </nav>
 
           <button
