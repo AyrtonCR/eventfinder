@@ -15,4 +15,4 @@ The stack we are using will be <em>Vite, React, Express</em> and <em>MongoDB.</e
 
 ### Link to current deplyed app:
 
-(link-will-go-here)
+https://eventfinder-ir5b.onrender.com/
