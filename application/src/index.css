@@ -7,14 +7,25 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body, #root {
+html, body {
   margin: 0;
+  padding: 0;
   min-height: 100%;
   font-family: 'Montserrat', sans-serif;
   background: #0a0a0c;
   color: #e0e0e0;
 }
 
+#root {
+  margin: 0 auto;
+  min-height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  color: #e0e0e0;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* Center all content sections */
 .daily-section, .weekly-section, .calendar-section {
   min-height: 100vh;
   display: flex;
@@ -23,6 +34,14 @@ html, body, #root {
   align-items: center;
   padding: 0;
   margin: 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Ensure content within sections is centered */
+.daily-section > *, .weekly-section > *, .calendar-section > * {
+  width: 100%;
+  max-width: 100%;
 }
 
 @media (max-width: 899px) {
@@ -37,6 +56,7 @@ html, body, #root {
 .down-arrow-desktop {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 @media (min-width: 900px) {
@@ -48,5 +68,12 @@ html, body, #root {
     width: 100%;
     z-index: 1000;
     pointer-events: auto;
+  }
+}
+
+/* Additional centering for ultra-wide screens */
+@media (min-width: 1600px) {
+  .daily-section, .weekly-section, .calendar-section {
+    max-width: 1400px;
   }
 }

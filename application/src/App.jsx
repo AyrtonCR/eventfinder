@@ -359,38 +359,40 @@ function App() {
         onTomorrow={() => console.log('Tomorrow')}
         onWeekly={() => scrollToRef(weeklyRef)}
       />
-      <div ref={dailyRef} className="daily-section" style={{ position: 'relative' }}>
-        <DailyEvents 
-          onNextDay={handleNextDay} 
-          onPreviousDay={handlePreviousDay}
-          onGoToToday={handleGoToToday}
-          gigs={getTodayGigs()} 
-          dateLabel={getTodayDate()} 
-        />
-        <div className="down-arrow-desktop">
-          <ScrollButton direction="down" onClick={() => scrollToRef(weeklyRef)} label="Scroll to weekly" />
+      <div className="main-content-container">
+        <div ref={dailyRef} className="daily-section" style={{ position: 'relative' }}>
+          <DailyEvents 
+            onNextDay={handleNextDay} 
+            onPreviousDay={handlePreviousDay}
+            onGoToToday={handleGoToToday}
+            gigs={getTodayGigs()} 
+            dateLabel={getTodayDate()} 
+          />
+          <div className="down-arrow-desktop">
+            <ScrollButton direction="down" onClick={() => scrollToRef(weeklyRef)} label="Scroll to weekly" />
+          </div>
         </div>
-      </div>
-      <div ref={weeklyRef} className="weekly-section">
-        {/* Fixed up arrow at top if weekly is active */}
-        {activeSection === 'weekly' && (
-          <ScrollButton direction="up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} label="Scroll to top" style={{ position: 'fixed', top: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 2000 }} />
-        )}
-        <WeeklyEvents 
-          gigs={getWeekGigs()} 
-          weekDates={getCurrentWeekDates()} 
-          onPreviousWeek={handlePreviousWeek}
-          onNextWeek={handleNextWeek}
-          onGoToToday={handleGoToToday}
-        />
-        {/* Fixed down arrow at bottom if weekly is active */}
-        {activeSection === 'weekly' && (
-          <ScrollButton direction="down" onClick={() => scrollToRef(calendarRef)} label="Scroll to calendar" style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 2000 }} />
-        )}
-      </div>
-      <div ref={calendarRef} className="calendar-section">
-        <ScrollButton direction="up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} label="Scroll to top" />
-        <EventCalendar gigs={gigs} />
+        <div ref={weeklyRef} className="weekly-section">
+          {/* Fixed up arrow at top if weekly is active */}
+          {activeSection === 'weekly' && (
+            <ScrollButton direction="up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} label="Scroll to top" style={{ position: 'fixed', top: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 2000 }} />
+          )}
+          <WeeklyEvents 
+            gigs={getWeekGigs()} 
+            weekDates={getCurrentWeekDates()} 
+            onPreviousWeek={handlePreviousWeek}
+            onNextWeek={handleNextWeek}
+            onGoToToday={handleGoToToday}
+          />
+          {/* Fixed down arrow at bottom if weekly is active */}
+          {activeSection === 'weekly' && (
+            <ScrollButton direction="down" onClick={() => scrollToRef(calendarRef)} label="Scroll to calendar" style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 2000 }} />
+          )}
+        </div>
+        <div ref={calendarRef} className="calendar-section">
+          <ScrollButton direction="up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} label="Scroll to top" />
+          <EventCalendar gigs={gigs} />
+        </div>
       </div>
       {showFooter && <Footer />}
     </>

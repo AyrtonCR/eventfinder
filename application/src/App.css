@@ -1,8 +1,33 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Container for all main content sections */
+.main-content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1200px) {
+  #root {
+    padding: 2rem 4rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  #root {
+    padding: 2rem 6rem;
+  }
 }
 
 .logo {

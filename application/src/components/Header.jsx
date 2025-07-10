@@ -90,20 +90,30 @@ export default function Header({ userProfile = null }) {
         {/* Remove the unstyled login/logout buttons from here */}
         <div className="header__right">
           <nav className={`header__nav ${open ? 'is-open' : ''}`}>
-            <a href="/auth" className="header__nav-link" target="_blank" rel="noopener noreferrer">
-              <motion.span
-                whileHover={{
-                  scale: 1.07,
-                  transition: {
-                    type: 'spring', stiffness: 300, damping: 18, duration: 0.3
-                  }
-                }}
-                style={{ display: 'inline-block' }}
+            {isAuthenticated && (
+              <button
+                className="header__nav-link"
+                style={{ background: 'none', border: 'none', color: '#eee', font: 'inherit', cursor: 'pointer', padding: 0 }}
+                onClick={() => navigate('/profile')}
               >
-                My Profile
-              </motion.span>
-            </a>
-            <a href="/about" className="header__nav-link" target="_blank" rel="noopener noreferrer">
+                <motion.span
+                  whileHover={{
+                    scale: 1.07,
+                    transition: {
+                      type: 'spring', stiffness: 300, damping: 18, duration: 0.3
+                    }
+                  }}
+                  style={{ display: 'inline-block' }}
+                >
+                  My Profile
+                </motion.span>
+              </button>
+            )}
+            <button
+              className="header__nav-link"
+              style={{ background: 'none', border: 'none', color: '#eee', font: 'inherit', cursor: 'pointer', padding: 0 }}
+              onClick={() => navigate('/about')}
+            >
               <motion.span
                 whileHover={{
                   scale: 1.07,
@@ -115,7 +125,7 @@ export default function Header({ userProfile = null }) {
               >
                 About
               </motion.span>
-            </a>
+            </button>
             {/* Add Auth0 login/logout buttons styled as nav links */}
             {!isAuthenticated ? (
               <button
