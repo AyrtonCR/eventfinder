@@ -5,19 +5,24 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:clean": "vite --force",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node backend/server.js"
+    "server": "node backend/server.js",
+    "kill": "taskkill /f /im node.exe"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "express-jwt": "^8.5.1",
     "framer-motion": "^12.23.0",
     "jwks-rsa": "^3.2.0",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.16.3",
     "react": "^19.1.0",
     "react-calendar": "^6.0.0",
     "react-dom": "^19.1.0",

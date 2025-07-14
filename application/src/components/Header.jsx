@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,23 @@ export default function Header({ userProfile = null }) {
   const navigate = useNavigate();
 
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+
+  // Get user profile from localStorage if available
+  const [localUserProfile, setLocalUserProfile] = useState(null);
+
+  useEffect(() => {
+    if (user && isAuthenticated) {
+      // Try to get profile from localStorage using Auth0 ID
+      const savedProfile = localStorage.getItem(`user_profile_${user.sub}`);
+      if (savedProfile) {
+        try {
+          setLocalUserProfile(JSON.parse(savedProfile));
+        } catch (error) {
+          console.error('Error parsing saved profile:', error);
+        }
+      }
+    }
+  }, [user, isAuthenticated]);
 
   const handleTitleClick = () => {
     navigate('/');
@@ -58,13 +75,15 @@ export default function Header({ userProfile = null }) {
     return '🎵'; // Default music note
   };
 
-  const profileEmoji = userProfile ? getGenreEmoji(userProfile.musicGenres) : '🎵';
+  // Use localUserProfile if available, otherwise fall back to userProfile prop
+  const activeProfile = localUserProfile || userProfile;
+  const profileEmoji = activeProfile ? getGenreEmoji(activeProfile.musicGenres) : '🎵';
 
   return (
     <header className="header">
       <div className="header__inner">
         <div className="header__left">
-          {userProfile && (
+          {activeProfile && (
             <motion.button
               className="header__profile-emoji"
               onClick={handleProfileClick}

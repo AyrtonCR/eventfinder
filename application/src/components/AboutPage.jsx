@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Header from './Header';
 import QuickActionsBar from './QuickActionsBar';
 import Footer from './Footer';
 import './AuthPage.css';
 
 export default function AboutPage() {
+  const { loginWithRedirect } = useAuth0();
   const [showFooter, setShowFooter] = useState(false);
 
   // Dummy user profile data for demonstration
@@ -29,7 +31,7 @@ export default function AboutPage() {
   return (
     <>
       <Header userProfile={userProfile} />
-      <QuickActionsBar />
+      <QuickActionsBar onAddGig={() => loginWithRedirect()} />
       <div className="auth-page">
         <div className="auth-content">
           <h1>About Christchurch Event Co.</h1>

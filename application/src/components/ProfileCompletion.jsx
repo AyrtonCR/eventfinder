@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { FiUpload, FiUser, FiMapPin, FiMusic, FiUsers } from 'react-icons/fi';
 import './ProfileCompletion.css';
 
-export default function ProfileCompletion({ onComplete, onBack }) {
+export default function ProfileCompletion({ onComplete, onBack, user = null }) {
   const [formData, setFormData] = useState({
-    fullName: '',
+    fullName: user?.name || '',
     age: '',
     address: '',
     about: '',

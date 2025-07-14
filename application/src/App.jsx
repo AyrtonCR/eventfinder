@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 
 // src/App.jsx
 import Header from './components/Header';
@@ -14,6 +16,8 @@ import ScrollButton from './components/ScrollButton';
 import Footer from './components/Footer';
 
 function App() {
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const navigate = useNavigate();
   const dailyRef = useRef(null);
   const weeklyRef = useRef(null);
   const calendarRef = useRef(null);
@@ -23,186 +27,63 @@ function App() {
   const [currentViewDate, setCurrentViewDate] = useState(new Date());
   
   // Centralized gig management
-  const [gigs, setGigs] = useState(() => {
-    // Load gigs from localStorage on mount
-    const savedGigs = localStorage.getItem('eventfinder_gigs');
-    if (savedGigs) {
-      try {
-        const parsedGigs = JSON.parse(savedGigs);
-        // Convert date strings back to Date objects
-        return parsedGigs.map(gig => ({
-          ...gig,
-          date: new Date(gig.date)
-        }));
-      } catch (error) {
-        console.error('Error loading gigs from localStorage:', error);
-      }
-    }
-    
-    // Default gigs if no saved data - use current dates
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const nextWeek = new Date(today);
-    nextWeek.setDate(today.getDate() + 7);
-    
-    return [
-      {
-        id: 1,
-        time: '10:00',
-        venue: 'Fat Eddies',
-        artist: 'Away with the Crazies',
-        genre: 'Indie Rock',
-        details: 'Free entry • Garden Bar',
-        date: today,
-        dayOfWeek: today.getDay(),
-        hour: 10,
-        description: 'Free entry • Garden Bar',
-        ticketPrice: 'Free',
-        ticketLink: '',
-      },
-      { 
-        id: 2, 
-        time: '13:30', 
-        venue: 'Dux Central', 
-        artist: 'Jazz Quartet', 
-        genre: 'Jazz', 
-        details: '$10 on the door',
-        date: today,
-        dayOfWeek: today.getDay(),
-        hour: 13,
-        description: '$10 on the door',
-        ticketPrice: '$10',
-        ticketLink: '',
-      },
-      { 
-        id: 3, 
-        time: '20:00', 
-        venue: 'Hagley Park', 
-        artist: 'L.A.B. + Kora', 
-        genre: 'Roots / Reggae', 
-        details: 'All ages',
-        date: tomorrow,
-        dayOfWeek: tomorrow.getDay(),
-        hour: 20,
-        description: 'All ages',
-        ticketPrice: '$25',
-        ticketLink: 'https://tickets.example.com',
-      },
-      { 
-        id: 4, 
-        time: '18:00', 
-        venue: 'The Darkroom', 
-        artist: 'Noise Act', 
-        genre: 'Experimental', 
-        details: 'R18',
-        date: nextWeek,
-        dayOfWeek: nextWeek.getDay(),
-        hour: 18,
-        description: 'R18',
-        ticketPrice: '$15',
-        ticketLink: '',
-      },
-      // Calendar gigs - spread across next few weeks
-      {
-        id: 5,
-        title: 'Shapeshifter @ Horncastle Arena',
-        date: new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000), // 2 weeks from today
-        time: '8 pm',
-        genre: 'Drum‑and‑Bass',
-        venue: 'Horncastle Arena',
-        artist: 'Shapeshifter',
-        details: 'Drum and Bass night',
-        dayOfWeek: new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000).getDay(),
-        hour: 20,
-        ticketPrice: '$45',
-        ticketLink: 'https://tickets.example.com',
-      },
-      {
-        id: 6,
-        title: 'L.A.B. – Hagley Park',
-        date: new Date(today.getTime() + 21 * 24 * 60 * 60 * 1000), // 3 weeks from today
-        time: '6 pm',
-        genre: 'Roots / Reggae',
-        venue: 'Hagley Park',
-        artist: 'L.A.B.',
-        details: 'Outdoor concert',
-        dayOfWeek: new Date(today.getTime() + 21 * 24 * 60 * 60 * 1000).getDay(),
-        hour: 18,
-        ticketPrice: '$35',
-        ticketLink: 'https://tickets.example.com',
-      },
-      {
-        id: 7,
-        title: 'CSO: Beethoven & Beyond',
-        date: new Date(today.getTime() + 28 * 24 * 60 * 60 * 1000), // 4 weeks from today
-        time: '7 pm',
-        genre: 'Classical',
-        venue: 'Christchurch Town Hall',
-        artist: 'Christchurch Symphony Orchestra',
-        details: 'Classical performance',
-        dayOfWeek: new Date(today.getTime() + 28 * 24 * 60 * 60 * 1000).getDay(),
-        hour: 19,
-        ticketPrice: '$60',
-        ticketLink: 'https://tickets.example.com',
-      },
-    ];
-  });
+  const [gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  // Save gigs to localStorage whenever they change
+  // Fetch gigs from database on component mount
   useEffect(() => {
-    localStorage.setItem('eventfinder_gigs', JSON.stringify(gigs));
-  }, [gigs]);
-
-  // Listen for storage changes (when gigs are added from profile page)
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'eventfinder_gigs') {
-        try {
-          const newGigs = JSON.parse(e.newValue || '[]');
-          const updatedGigs = newGigs.map(gig => ({
-            ...gig,
-            date: new Date(gig.date)
-          }));
-          setGigs(updatedGigs);
-        } catch (error) {
-          console.error('Error updating gigs from storage:', error);
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  // Function to refresh gigs from localStorage
-  const refreshGigs = () => {
-    const savedGigs = localStorage.getItem('eventfinder_gigs');
-    if (savedGigs) {
+    const fetchGigs = async () => {
       try {
-        const parsedGigs = JSON.parse(savedGigs);
-        const updatedGigs = parsedGigs.map(gig => ({
+        setLoading(true);
+        const response = await fetch('http://localhost:4000/api/gigs');
+        if (!response.ok) {
+          throw new Error('Failed to fetch gigs');
+        }
+        const data = await response.json();
+        
+        // Transform the data to match the expected format
+        const transformedGigs = data.map(gig => ({
           ...gig,
-          date: new Date(gig.date)
+          id: gig._id,
+          artist: gig.band,
+          date: new Date(gig.date),
+          dayOfWeek: new Date(gig.date).getDay(),
+          hour: parseInt(gig.time.split(':')[0]),
+          details: gig.description || '',
+          title: `${gig.band} @ ${gig.venue}`
         }));
-        setGigs(updatedGigs);
+        
+        setGigs(transformedGigs);
       } catch (error) {
-        console.error('Error refreshing gigs:', error);
+        console.error('Error fetching gigs:', error);
+        // Fallback to localStorage if API fails
+        const savedGigs = localStorage.getItem('eventfinder_gigs');
+        if (savedGigs) {
+          try {
+            const parsedGigs = JSON.parse(savedGigs);
+            const updatedGigs = parsedGigs.map(gig => ({
+              ...gig,
+              date: new Date(gig.date)
+            }));
+            setGigs(updatedGigs);
+          } catch (error) {
+            console.error('Error loading gigs from localStorage:', error);
+          }
+        }
+      } finally {
+        setLoading(false);
       }
-    }
-  };
-
-  // Refresh gigs when component mounts and when window gains focus
-  useEffect(() => {
-    refreshGigs();
-    
-    const handleFocus = () => {
-      refreshGigs();
     };
-    
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+
+    fetchGigs();
   }, []);
+
+  // Save gigs to localStorage as backup
+  useEffect(() => {
+    if (gigs.length > 0) {
+      localStorage.setItem('eventfinder_gigs', JSON.stringify(gigs));
+    }
+  }, [gigs]);
 
   // Dummy user profile data for demonstration
   const [userProfile] = useState({
@@ -213,15 +94,17 @@ function App() {
 
   // Function to add new gig
   const addGig = (gigData) => {
+    // Transform the gig data to match the expected format
     const newGig = {
-      id: Date.now(), // Simple ID generation
       ...gigData,
+      id: gigData.id || gigData._id,
+      artist: gigData.artist || gigData.band,
       date: new Date(gigData.date),
       dayOfWeek: new Date(gigData.date).getDay(),
       hour: parseInt(gigData.time.split(':')[0]),
-      title: `${gigData.artist} @ ${gigData.venue}`,
+      title: `${gigData.artist || gigData.band} @ ${gigData.venue}`,
     };
-    setGigs([...gigs, newGig]);
+    setGigs(prevGigs => [...prevGigs, newGig]);
   };
 
   // Get gigs for the current viewing date (daily view)
@@ -344,9 +227,39 @@ function App() {
   };
 
   const handleAddGig = () => {
-    // Navigate to profile page to add gig
-    window.location.href = '/profile';
+    if (isAuthenticated) {
+      // User is authenticated, navigate to profile page to add gig
+      navigate('/profile');
+    } else {
+      // User is not authenticated, redirect to login
+      loginWithRedirect();
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
+      }}>
+        <div style={{ textAlign: 'center', color: '#f3f3f7' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            border: '3px solid rgba(255, 179, 71, 0.2)',
+            borderTop: '3px solid #ffb347',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem'
+          }}></div>
+          <p>Loading events...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

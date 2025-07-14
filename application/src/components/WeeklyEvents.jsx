@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX, FiMapPin, FiCalendar, FiClock, FiMusic, FiExternalLink } from 'react-icons/fi';
 import './WeeklyEvents.css';
 
 const times = ['10am', '11am', '12am', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm', '12am', '1am', '2am'];
 
 export default function WeeklyEvents({ gigs = [], weekDates = [], onPreviousWeek, onNextWeek, onGoToToday }) {
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [selectedGigs, setSelectedGigs] = useState([]);
+  
   // Generate day labels from weekDates
   const days = weekDates.map(date => {
     const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -43,6 +48,20 @@ export default function WeeklyEvents({ gigs = [], weekDates = [], onPreviousWeek
     };
     return colors[genre] || '#cccccc';
   }
+
+  // Handle clicking on a time slot
+  const handleTimeSlotClick = (dayIndex, timeIndex) => {
+    const day = dayIndex + 1; // Convert to 1-indexed
+    const time = timeIndex + 1; // Convert to 1-indexed
+    
+    // Find all gigs for this time slot
+    const gigsInSlot = events.filter(e => e.day === day && e.time === time);
+    
+    if (gigsInSlot.length > 0) {
+      setSelectedTimeSlot({ day: dayIndex, time: timeIndex });
+      setSelectedGigs(gigsInSlot.map(e => e.gig));
+    }
+  };
 
   // Generate week title from weekDates
   const getWeekTitle = () => {
@@ -89,7 +108,12 @@ export default function WeeklyEvents({ gigs = [], weekDates = [], onPreviousWeek
             {days.map((_, colIdx) => {
               const event = events.find(e => e.day === colIdx + 1 && e.time === rowIdx + 1);
               return (
-                <div className="weekly-grid-cell" key={colIdx + '-' + rowIdx}>
+                <div 
+                  className="weekly-grid-cell" 
+                  key={colIdx + '-' + rowIdx}
+                  onClick={() => handleTimeSlotClick(colIdx, rowIdx)}
+                  style={{ cursor: event ? 'pointer' : 'default' }}
+                >
                   {event && (
                     <div 
                       className="weekly-event" 
@@ -105,6 +129,107 @@ export default function WeeklyEvents({ gigs = [], weekDates = [], onPreviousWeek
           </React.Fragment>
         ))}
       </div>
+      
+      {/* Weekly Event Popup */}
+      <AnimatePresence>
+        {selectedTimeSlot && selectedGigs.length > 0 && (
+          <motion.div
+            className="weekly-popup-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              setSelectedTimeSlot(null);
+              setSelectedGigs([]);
+            }}
+          >
+            <motion.div
+              className="weekly-popup"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="weekly-popup-header">
+                <h2>
+                  {times[selectedTimeSlot.time]} • {days[selectedTimeSlot.day]}
+                </h2>
+                <button 
+                  className="weekly-popup-close"
+                  onClick={() => {
+                    setSelectedTimeSlot(null);
+                    setSelectedGigs([]);
+                  }}
+                >
+                  <FiX />
+                </button>
+              </div>
+              
+              <div className="weekly-popup-content">
+                <div className="weekly-popup-gigs">
+                  {selectedGigs.map((gig, index) => (
+                    <div key={index} className="weekly-popup-gig">
+                      <div className="gig-header">
+                        <h3>{gig.artist} @ {gig.venue}</h3>
+                        <span className="gig-time">{gig.time}</span>
+                      </div>
+                      
+                      <div className="gig-details">
+                        {gig.genre && (
+                          <div className="gig-detail">
+                            <FiMusic />
+                            <span>{gig.genre}</span>
+                          </div>
+                        )}
+                        {gig.venue && (
+                          <div className="gig-detail">
+                            <FiMapPin />
+                            <span>{gig.venue}</span>
+                          </div>
+                        )}
+                        {gig.date && (
+                          <div className="gig-detail">
+                            <FiCalendar />
+                            <span>{new Date(gig.date).toLocaleDateString('en-US', { 
+                              weekday: 'long', 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {gig.description && (
+                        <p className="gig-description">{gig.description}</p>
+                      )}
+                      
+                      {(gig.ticketPrice || gig.ticketLink) && (
+                        <div className="gig-tickets">
+                          {gig.ticketPrice && (
+                            <span className="ticket-price">{gig.ticketPrice}</span>
+                          )}
+                          {gig.ticketLink && (
+                            <a 
+                              href={gig.ticketLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="ticket-link"
+                            >
+                              <FiExternalLink />
+                              Get Tickets
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

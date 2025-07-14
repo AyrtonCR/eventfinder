@@ -21,10 +21,23 @@ export default function EventCalendar({ gigs = [] }) {
           className="main-cal"
   tileClassName={({ date }) => {
     const day = date.getDay(); // 0 = Sunday, 5 = Friday, 6 = Saturday
-    if (day === 5 || day === 6) {
-      return 'highlighted-day';
+    let className = '';
+    
+    // Check if there are gigs on this date
+    const hasGigs = gigs.some(gig => 
+      gig.date.toDateString() === date.toDateString()
+    );
+    
+    if (hasGigs) {
+      className += ' has-gigs';
     }
-    return null;
+    
+    // Add weekend highlighting
+    if (day === 5 || day === 6) {
+      className += ' highlighted-day';
+    }
+    
+    return className || null;
   }}
 />
 

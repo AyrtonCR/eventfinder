@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import Header from './Header';
 import QuickActionsBar from './QuickActionsBar';
 import Footer from './Footer';
@@ -7,6 +8,7 @@ import ProfileCompletion from './ProfileCompletion';
 import './AuthPage.css';
 
 export default function AuthPage() {
+  const { loginWithRedirect } = useAuth0();
   const [showSignup, setShowSignup] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
@@ -53,7 +55,7 @@ export default function AuthPage() {
     return (
       <>
         <Header userProfile={profileData} />
-        <QuickActionsBar />
+        <QuickActionsBar onAddGig={() => loginWithRedirect()} />
         <ProfileCompletion 
           onComplete={handleProfileComplete}
           onBack={handleBackToSignup}
@@ -66,7 +68,7 @@ export default function AuthPage() {
   return (
     <>
       <Header userProfile={profileData} />
-      <QuickActionsBar />
+      <QuickActionsBar onAddGig={() => loginWithRedirect()} />
       <div className="auth-page">
         <div className="auth-content">
           <h1>Welcome to Eventfinder</h1>

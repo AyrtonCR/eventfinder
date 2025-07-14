@@ -113,3 +113,27 @@ backdrop-filter: blur(6px) saturate(160%);
   border-radius: 6px;
   font-weight: bold;
 }
+
+/* Dot indicator for days with gigs */
+.has-gigs {
+  position: relative;
+}
+
+.has-gigs::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #ffb347;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(255, 179, 71, 0.5);
+}
+
+/* Ensure the dot shows up on highlighted days too */
+.highlighted-day.has-gigs::after {
+  background: #fff;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+}

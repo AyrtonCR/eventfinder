@@ -1,27 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiClock, FiMapPin, FiMusic, FiUsers, FiPlus, FiX, FiEye } from 'react-icons/fi';
+import { useAuth0 } from '@auth0/auth0-react';
 import BandForm from './BandForm';
 import BandProfile from './BandProfile';
 import VenueForm from './VenueForm';
 import VenueProfile from './VenueProfile';
 import './AddGig.css';
 
-export default function AddGig({ onSave, onCancel, existingBands = [], existingVenues = [], bandProfiles = {}, venueProfiles = {} }) {
+export default function AddGig({ onSave, onCancel, existingGig = null, existingBands = [], existingVenues = [], bandProfiles = {}, venueProfiles = {} }) {
+  const { getAccessTokenSilently } = useAuth0();
   const [formData, setFormData] = useState({
-    band: '',
-    venue: '',
-    date: '',
-    time: '',
-    description: '',
-    genre: '',
-    ticketPrice: '',
-    ticketLink: ''
+    band: existingGig?.band || '',
+    venue: existingGig?.venue || '',
+    date: existingGig?.date ? new Date(existingGig.date).toISOString().split('T')[0] : '',
+    time: existingGig?.time || '',
+    description: existingGig?.description || '',
+    genre: existingGig?.genre || '',
+    ticketPrice: existingGig?.ticketPrice || '',
+    ticketLink: existingGig?.ticketLink || ''
   });
 
-  const [bands, setBands] = useState(existingBands);
+  const [bands, setBands] = useState(() => {
+    if (existingGig) {
+      return [...new Set([...existingBands, existingGig.band])];
+    }
+    return existingBands;
+  });
   const [localBandProfiles, setLocalBandProfiles] = useState(bandProfiles);
-  const [venues, setVenues] = useState(existingVenues);
+  const [venues, setVenues] = useState(() => {
+    if (existingGig) {
+      return [...new Set([...existingVenues, existingGig.venue])];
+    }
+    return existingVenues;
+  });
   const [localVenueProfiles, setLocalVenueProfiles] = useState(venueProfiles);
   const [showBandForm, setShowBandForm] = useState(false);
   const [showBandProfile, setShowBandProfile] = useState(false);
@@ -30,6 +42,23 @@ export default function AddGig({ onSave, onCancel, existingBands = [], existingV
   const [showVenueProfile, setShowVenueProfile] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [showFooter, setShowFooter] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Update form data when existingGig changes
+  useEffect(() => {
+    if (existingGig) {
+      setFormData({
+        band: existingGig.band || '',
+        venue: existingGig.venue || '',
+        date: existingGig.date ? new Date(existingGig.date).toISOString().split('T')[0] : '',
+        time: existingGig.time || '',
+        description: existingGig.description || '',
+        genre: existingGig.genre || '',
+        ticketPrice: existingGig.ticketPrice || '',
+        ticketLink: existingGig.ticketLink || ''
+      });
+    }
+  }, [existingGig]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,19 +112,72 @@ export default function AddGig({ onSave, onCancel, existingBands = [], existingV
     setShowVenueProfile(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.band && formData.venue && formData.date && formData.time) {
-      const gigData = {
-        ...formData,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-        bands: bands,
-        venues: venues,
-        bandProfiles: localBandProfiles,
-        venueProfiles: localVenueProfiles
-      };
-      onSave(gigData);
+      try {
+        setIsSubmitting(true);
+        const token = await getAccessTokenSilently();
+        
+        // Prepare gig data for the API
+        const gigData = {
+          band: formData.band,
+          venue: formData.venue,
+          date: formData.date,
+          time: formData.time,
+          description: formData.description,
+          genre: formData.genre,
+          ticketPrice: formData.ticketPrice,
+          ticketLink: formData.ticketLink
+        };
+
+        let response;
+        if (existingGig) {
+          // Update existing gig
+          response = await fetch(`http://localhost:4000/api/gigs/${existingGig._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(gigData)
+          });
+        } else {
+          // Create new gig
+          response = await fetch('http://localhost:4000/api/gigs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(gigData)
+          });
+        }
+
+        if (!response.ok) {
+          throw new Error(existingGig ? 'Failed to update gig' : 'Failed to save gig');
+        }
+
+        const savedGig = await response.json();
+        
+        // Also save to localStorage for immediate display
+        const gigDataForLocal = {
+          ...savedGig,
+          id: savedGig._id,
+          artist: formData.band,
+          bands: bands,
+          venues: venues,
+          bandProfiles: localBandProfiles,
+          venueProfiles: localVenueProfiles
+        };
+        
+        onSave(gigDataForLocal);
+      } catch (error) {
+        console.error('Error saving gig:', error);
+        alert(existingGig ? 'Failed to update gig. Please try again.' : 'Failed to save gig. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -108,8 +190,8 @@ export default function AddGig({ onSave, onCancel, existingBands = [], existingV
         transition={{ duration: 0.6 }}
       >
         <div className="add-gig-header">
-          <h1>Add a New Gig</h1>
-          <p>Share your upcoming performance with the Christchurch music community</p>
+          <h1>{existingGig ? 'Edit Gig' : 'Add a New Gig'}</h1>
+          <p>{existingGig ? 'Update your gig information' : 'Share your upcoming performance with the Christchurch music community'}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="add-gig-form">
@@ -294,10 +376,11 @@ export default function AddGig({ onSave, onCancel, existingBands = [], existingV
             <motion.button
               type="submit"
               className="btn-primary"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              disabled={isSubmitting}
+              whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
             >
-              Add Gig
+              {isSubmitting ? 'Saving...' : (existingGig ? 'Update Gig' : 'Add Gig')}
             </motion.button>
           </div>
         </form>
